@@ -103,7 +103,7 @@ public class Monster : MonoBehaviour
             spriter.sortingOrder = 1;
             anime.SetBool("Dead", true);
             GameManager.instance.kill++;
-            //GameManager.instance.GetExp 아직 안함
+            GameManager.instance.GetExp();
         }
     }
 
@@ -114,7 +114,7 @@ public class Monster : MonoBehaviour
         yield return wait;
         Vector3 playerPos = GameManager.instance.player.transform.position;
         Vector3 dirVec = transform.position - playerPos;
-        rigid.AddForce(dirVec.normalized * 3, ForceMode2D.Impulse);
+        rigid.AddForce(dirVec.normalized * 1.5f, ForceMode2D.Impulse);
 
         yield return waitsec;
 

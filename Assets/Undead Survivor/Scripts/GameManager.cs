@@ -25,4 +25,18 @@ public class GameManager : MonoBehaviour
     {
         instance = this;
     }
+
+    public void GetExp()
+    {
+        if (!isLive)
+            return;
+
+        exp++;
+
+        if (exp == nextExp[Mathf.Min(level, nextExp.Length - 1)] )
+        {
+            level++;
+            exp = 0;
+        }
+    }
 }
