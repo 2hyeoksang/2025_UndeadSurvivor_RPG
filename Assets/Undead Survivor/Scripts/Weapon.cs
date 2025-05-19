@@ -7,19 +7,15 @@ public class Weapon : MonoBehaviour
     public float damage;
     public int count;
     public float speed;
+    public static Weapon instance;
 
     float timer;
     Player player;
 
     private void Awake()
     {
-        //player = GameManager.instance.player;
-    }
-
-    private void Start()
-    {
+        instance = this;
         player = GameManager.instance.player;
-        Init();
     }
 
     private void Update()
@@ -45,8 +41,27 @@ public class Weapon : MonoBehaviour
         }
     }
 
-    public void Init()  // юс╫ц
+    public void Init(ItemData data) 
     {
+        // Basic Set
+        name = "Weapon" + data.itemID;
+        transform.parent = player.transform;
+        transform.localPosition = Vector3.zero;
+
+        // Property Set
+        id = data.itemID;
+        damage = data.baseDamage;
+        count = data.baseCount;
+
+        for (int i = 0; i < GameManager.instance.pool.prefabs.Length; i++)
+        {
+            if (data.projectile == GameManager.instance.pool.prefabs[i])
+            {
+                prefabId = i;
+                break;
+            }
+        }
+
         switch (id)
         {
             case 0:
@@ -58,6 +73,8 @@ public class Weapon : MonoBehaviour
                 speed = 0.3f;
                 break;
         }
+
+        player.BroadcastMessage("ApplyGear", SendMessageOptions.DontRequireReceiver);
     }
 
     void Batch()
@@ -88,7 +105,6 @@ public class Weapon : MonoBehaviour
     }
 
 
-
     void Fire()
     {
         if (!player.scanner.nearestTarget)
@@ -102,6 +118,17 @@ public class Weapon : MonoBehaviour
         bullet.position = transform.position;
         bullet.rotation = Quaternion.FromToRotation(Vector3.up, dir);
         bullet.GetComponent<Bullet>().Init(damage, count, dir);
+    }
 
+
+    public void LevelUp(float damage, int count)
+    {
+        this.damage = damage;
+        this.count += count;
+
+        if (id == 0)
+            Batch();
+
+        player.BroadcastMessage("ApplyGear", SendMessageOptions.DontRequireReceiver);
     }
 }

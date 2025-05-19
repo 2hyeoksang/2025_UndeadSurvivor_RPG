@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     public float maxHealth = 100f;
     public int level;
     public int kill;
+    public int skillPoint;
     public int exp;
     public int[] nextExp = { 3, 5, 10, 100, 150, 210, 280, 360, 450, 600 };
 
@@ -36,6 +37,7 @@ public class GameManager : MonoBehaviour
         if (exp == nextExp[Mathf.Min(level, nextExp.Length - 1)] )
         {
             level++;
+            skillPoint++;
             exp = 0;
         }
     }
